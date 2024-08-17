@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 import pandas as pd
 import os
 
 def delete_record_and_image():
     id_to_delete = entry.get()
+    subFileName = combo.get()
 
     if not id_to_delete:
         messagebox.showwarning("Input Error", "Please input 身分證字號.")
@@ -24,7 +26,7 @@ def delete_record_and_image():
             return
         
         # check if file exists
-        image_file_path = os.path.join(image_folder_path, f"{id_to_delete}.png")
+        image_file_path = os.path.join(image_folder_path, f"{id_to_delete}{subFileName}")
         if not os.path.exists(image_folder_path):
             messagebox.showinfo("Not Found", f"身分證字號: {id_to_delete} 相關圖片不存在")
             return
@@ -52,6 +54,14 @@ label.pack(pady=10)
 
 entry = tk.Entry(root, width=30)
 entry.pack(pady=10)
+
+subFileNameList = [".png", ".jpg"]
+
+label = tk.Label(root, text="選擇副檔名:")
+label.pack(pady=10)
+
+combo = ttk.Combobox(root, value=subFileNameList, width=10)
+combo.pack(pady=10)
 
 delete_button = tk.Button(root, text="Delete", command=delete_record_and_image)
 delete_button.pack(pady=20)
