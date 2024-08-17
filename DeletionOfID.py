@@ -1,33 +1,31 @@
-import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
-import pandas as pd
-import os
+from tkinter import Tk, ttk, Label, Button, messagebox
+from pandas import read_excel
+from os import path, listdir
 
 def delete_record_and_image():
-    id_to_delete = entry.get()
-    subFileName = combo.get()
+    selected_file = combo.get()
+    id_to_delete = path.splitext(selected_file)[0]  # Remove the file extension
 
     if not id_to_delete:
-        messagebox.showwarning("Input Error", "Please input 身分證字號.")
+        messagebox.showwarning("Input Error", "請輸入身分證字號.")
         return
 
     # Path to the Excel file and image folder
-    excel_file_path = "mock_data.xlsx"
+    excel_file_path = "證號清冊.xlsx"
     image_folder_path = "."
 
     try:
         # Load the Excel file
-        df = pd.read_excel(excel_file_path)
+        df = read_excel(excel_file_path)
 
         # Check if ID exists
         if id_to_delete not in df["身分證字號"].values:
-            messagebox.showinfo("Not Found", f"在 {excel_file_path} 並未找到身分證字號: {id_to_delete}")
+            messagebox.showinfo("Not Found", f"在 {excel_file_path} 中並未找到身分證字號: {id_to_delete}")
             return
         
         # check if file exists
-        image_file_path = os.path.join(image_folder_path, f"{id_to_delete}{subFileName}")
-        if not os.path.exists(image_folder_path):
+        image_file_path = path.join(image_folder_path, f"{selected_file}")
+        if not path.exists(image_folder_path):
             messagebox.showinfo("Not Found", f"身分證字號: {id_to_delete} 相關圖片不存在")
             return
 
@@ -45,25 +43,28 @@ def delete_record_and_image():
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 # Create the main application window
-root = tk.Tk()
-root.title("Delete Record and Image")
+root = Tk()
+root.title("刪除資料")
+
+# Set the root window size (width and height)
+root.geometry("270x150")
 
 # Create and place the GUI components
-label = tk.Label(root, text="輸入身分證字號:")
+label = Label(root, text="選擇圖片:")
 label.pack(pady=10)
 
-entry = tk.Entry(root, width=30)
-entry.pack(pady=10)
+# List all files in the current directory
+image_folder_path = "."
+all_files = listdir(image_folder_path)
 
-subFileNameList = [".png", ".jpg"]
+# Filter the list to include only .png and .jpg image files
+image_files = [file for file in all_files if file.endswith((".png", ".jpg", ".svg", ".pdf", ".gif"))]
 
-label = tk.Label(root, text="選擇副檔名:")
-label.pack(pady=10)
-
-combo = ttk.Combobox(root, value=subFileNameList, width=10)
+# Create the drop-down menu (combobox)
+combo = ttk.Combobox(root, values=image_files, width=25)
 combo.pack(pady=10)
 
-delete_button = tk.Button(root, text="Delete", command=delete_record_and_image)
+delete_button = Button(root, text="刪除", command=delete_record_and_image)
 delete_button.pack(pady=20)
 
 # Start the GUI event loop

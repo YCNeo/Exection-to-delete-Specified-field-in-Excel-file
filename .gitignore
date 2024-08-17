@@ -1,3 +1,4 @@
-Deletion.*
+*.exe
+*.spec
 
 build/
