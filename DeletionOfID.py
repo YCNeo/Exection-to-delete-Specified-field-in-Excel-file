@@ -2,7 +2,7 @@ from tkinter import Tk, ttk, Label, Button, messagebox as msgBox
 from pandas import read_excel
 from os import path, listdir, remove
 
-def delete_record_and_image():
+def deleteRecordAndImage():
     selectedFile = combo.get()
     targeID = path.splitext(selectedFile)[0]  # Remove the file extension
 
@@ -64,7 +64,7 @@ imageFiles = [file for file in allFiles if file.endswith((".png", ".jpg", ".svg"
 combo = ttk.Combobox(root, values=imageFiles, width=25)
 combo.pack(pady=10)
 
-deleteButton = Button(root, text="刪除", command=delete_record_and_image)
+deleteButton = Button(root, text="刪除", command=deleteRecordAndImage)
 deleteButton.pack(pady=20)
 
 # Start the GUI event loop
