@@ -57,7 +57,7 @@ label.pack(pady=10)
 folderPath = "."
 allFiles = listdir(folderPath)
 
-# Filter the list to include only .png and .jpg image files
+# Filter the list to include only image files
 imageFiles = [file for file in allFiles if file.endswith((".png", ".jpg", ".svg", ".pdf", ".gif"))]
 
 # Create the drop-down menu (combobox)
